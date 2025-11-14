@@ -1,0 +1,5 @@
+{
+  "name": "AI Deepfake Detector",
+  "description": "An application to detect AI-generated images and videos. Upload a media file, and our advanced AI will analyze it for signs of deepfake manipulation, providing a verdict and a detailed report.",
+  "requestFramePermissions": []
+}
