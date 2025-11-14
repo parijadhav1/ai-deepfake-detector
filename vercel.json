@@ -1,6 +1,7 @@
 {
+  "version": 2,
   "functions": {
-    "api/detect.js": {        
+    "api/detect.js": {
       "runtime": "nodejs18.x"
     }
   }
