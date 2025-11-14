@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { analyzeMedia } from './services/geminiService';
+import { detectDeepfake } from './services/geminiService';   // FIXED
 import type { MediaType, AnalysisResult } from './types';
 import FileUpload from './components/FileUpload';
 import ResultDisplay from './components/ResultDisplay';
@@ -15,7 +14,6 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Cleanup preview URL when component unmounts or file changes
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
@@ -47,7 +45,7 @@ const App: React.FC = () => {
   
   const handleClear = () => {
     resetState();
-  }
+  };
 
   const handleDetect = async () => {
     if (!file) {
@@ -60,7 +58,8 @@ const App: React.FC = () => {
     setResult(null);
 
     try {
-      const analysisResult = await analyzeMedia(file, mediaType);
+      // FIXED: replaced analyzeMedia() with detectDeepfake()
+      const analysisResult = await detectDeepfake(file);
       setResult(analysisResult);
     } catch (err) {
       if (err instanceof Error) {
@@ -72,7 +71,7 @@ const App: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
+
   const TabButton: React.FC<{type: MediaType; label: string; icon: React.ReactNode}> = ({type, label, icon}) => (
     <button
       onClick={() => handleMediaTypeChange(type)}
@@ -113,20 +112,20 @@ const App: React.FC = () => {
             />
 
             <div className="flex flex-col gap-4 sm:flex-row">
-                <button
+              <button
                 onClick={handleDetect}
                 disabled={!file || isLoading}
                 className="w-full px-6 py-3 text-lg font-bold text-white transition-all duration-300 rounded-lg shadow-lg bg-brand-accent hover:bg-blue-500 disabled:bg-gray-600 disabled:cursor-not-allowed disabled:shadow-none focus:outline-none focus:ring-4 focus:ring-blue-400/50"
-                >
+              >
                 {isLoading ? 'Analyzing...' : 'Detect'}
-                </button>
-                <button
+              </button>
+              <button
                 onClick={handleClear}
                 disabled={isLoading}
                 className="w-full px-6 py-3 font-semibold text-gray-300 transition-colors duration-300 bg-gray-700 rounded-lg sm:w-auto hover:bg-gray-600 disabled:opacity-50"
-                >
+              >
                 Clear
-                </button>
+              </button>
             </div>
           </div>
           
@@ -136,7 +135,7 @@ const App: React.FC = () => {
         </main>
 
         <footer className="py-8 mt-8 text-center text-gray-500 border-t border-gray-800">
-            <p>&copy; {new Date().getFullYear()} AI Deepfake Detector. Powered by Gemini.</p>
+          <p>&copy; {new Date().getFullYear()} AI Deepfake Detector. Powered by Gemini.</p>
         </footer>
       </div>
     </div>
