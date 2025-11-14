@@ -12,9 +12,8 @@ export async function detectDeepfake(imageFile: File) {
   const response = await fetch('/api/detect', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ imageBase64 })
+    body: JSON.stringify({ imageBase64 }),
   });
 
-  const result = await response.json();
-  return result;
+  return await response.json();
 }

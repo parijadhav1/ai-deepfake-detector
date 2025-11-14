@@ -48,29 +48,25 @@ const App: React.FC = () => {
   };
 
   const handleDetect = async () => {
-    if (!file) {
-      setError("Please select a file first.");
-      return;
-    }
+  if (!file) {
+    setError("Please select a file first.");
+    return;
+  }
 
-    setIsLoading(true);
-    setError(null);
-    setResult(null);
+  setIsLoading(true);
+  setError(null);
+  setResult(null);
 
-    try {
-      // FIXED: replaced analyzeMedia() with detectDeepfake()
-      const analysisResult = await detectDeepfake(file);
-      setResult(analysisResult);
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("An unexpected error occurred.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  try {
+    const analysisResult = await detectDeepfake(file);
+    setResult(analysisResult);
+  } catch (err) {
+    setError("Error analyzing image.");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const TabButton: React.FC<{type: MediaType; label: string; icon: React.ReactNode}> = ({type, label, icon}) => (
     <button

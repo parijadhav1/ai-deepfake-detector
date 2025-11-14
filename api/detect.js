@@ -1,4 +1,3 @@
-// api/detect.js
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
@@ -19,16 +18,15 @@ export default async function handler(req, res) {
       contents: [
         {
           parts: [
-            { text: "Analyze if this is a deepfake image. Provide verdict and short reasoning." },
+            { text: "Analyze if this image is AI-generated or a deepfake. Provide a verdict and short reasoning." },
             { inline_data: { mimeType: "image/jpeg", data: imageBase64 } }
           ]
         }
       ]
     };
 
-    // Node 18+ has global fetch
     const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -37,8 +35,9 @@ export default async function handler(req, res) {
     );
 
     const data = await r.json();
-    return res.status(r.status === 200 ? 200 : 500).json(data);
+    return res.status(200).json(data);
+
   } catch (err) {
-    return res.status(500).json({ error: err?.message || String(err) });
+    return res.status(500).json({ error: err.message });
   }
 }
